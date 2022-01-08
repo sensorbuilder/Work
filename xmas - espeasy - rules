@@ -1,0 +1,53 @@
+//savonds aan tot 23:59
+
+on Clock#Time=All,%sunset-2h% do //will run at sunset  (%sunset% is also available)
+ Gpio,12,1
+ Publish,%sysname%/Tree, "%sunset% Tree Aan"
+endon
+
+on Clock#Time=All,22:59 do //will run at sunrise  (%sunset% is also available)
+ Gpio,12,0
+ Publish,%sysname%/Tree, "%sunrise% Tree Uit"  
+endon
+
+
+//sochtend aan en een uur na zonsopgang uit
+on Clock#Time=All,%sunrise-2h% do //will run at sunset  (%sunset% is also available)
+ Gpio,12,1
+ Publish,%sysname%/Tree, "%sunrise-1h% Tree Aan"
+endon
+
+on Clock#Time=All,%sunrise+1h% do //will run at sunrise  (%sunset% is also available)
+ Gpio,12,0
+ Publish,%sysname%/Tree, "%sunset+1h% Tree Uit"  
+endon
+
+
+on Clock#time=All, 11:59 do
+ TimerSet,2,60
+endon
+
+On Rules#Timer=2 do
+ Reboot
+endon
+
+
+on System#Boot do 
+ Publish, %sysname%/Info, "%sysname% booted"
+ if %systm_hm% > %sunrise-1h% and %systm_hm% < %sunset-1h% 
+   Publish, %sysname%/Daylight, 1
+   Gpio,12,0
+ else
+   Publish, %sysname%/Daylight, 0
+   Gpio,12,1
+ endif
+ #Publish,HomeIot, "IotData,device=tree status=[tree#State]"
+
+timerSet,1,30      //Set Timer 1 for the next event in 30 seconds
+
+endon
+
+On Rules#Timer=1 do  //When Timer1 expires, do
+ Publish,HomeIot, "IotData,device=tree status=[tree#State]"
+  timerSet,1,60       //Resets the Timer 1 for another 30 seconds
+endon
