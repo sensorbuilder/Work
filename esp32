@@ -1,0 +1,4 @@
+device-name - mac address - ip - application
+TTGO_2_BME280 - 8cce4e883ca0 - 192.168.2.27 - twitter temp/druk/luchtvocht
+TTGO_3_BME280 - e868e7e20e0 - 192.168.2.28 - test - kantoor
+TTBO_BAT_BME280 - 
