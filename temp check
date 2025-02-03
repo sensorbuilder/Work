@@ -1,0 +1,23 @@
+/** 
+check temperature and store in array
+on publish
+sent avg, min, max
+**/
+
+rtc int samples=0;
+rtc double temp[10];
+rtc double pres[10];
+
+store value
+temp[samples] = read temp;
+press[samples] = read pres;
+samples++;
+
+
+check time to call home
+for (int i = 0; i < samples; i++){
+}
+
+
+
+call home
